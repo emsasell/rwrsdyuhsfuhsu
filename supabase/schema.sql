@@ -81,6 +81,9 @@ alter table public.profiles add column if not exists username text;
 alter table public.profiles add column if not exists avatar_url text;
 alter table public.profiles add column if not exists bio text;
 
+-- Remove incompatible legacy return signatures before recreating the helper.
+drop function if exists public.get_my_devices();
+
 -- Devices compatibility upgrade. This keeps both fresh installs and older EMCHAT databases working.
 alter table public.devices add column if not exists name text;
 alter table public.devices add column if not exists device_name text;

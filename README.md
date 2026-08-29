@@ -95,3 +95,7 @@
 `Property 'onUploadCompleted' is missing`.
 
 Проект не использует Tailwind, поэтому ошибки `Cannot find module 'tailwindcss'` здесь не должно быть.
+
+
+## V6.2 FINAL IMPORTANT
+Run `supabase/schema.sql` once. It now drops the legacy `get_my_devices()` helper before recreating it, so old databases no longer fail with `cannot change return type` and the whole migration no longer rolls back.

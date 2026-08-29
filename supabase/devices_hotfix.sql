@@ -37,6 +37,9 @@ for all to authenticated
 using (user_id=auth.uid())
 with check (user_id=auth.uid());
 
+-- Remove incompatible legacy return signatures before recreating the helper.
+drop function if exists public.get_my_devices();
+
 -- Optional helper for checking the current account's devices.
 create or replace function public.get_my_devices()
 returns table(

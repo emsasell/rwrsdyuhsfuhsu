@@ -1,3 +1,1 @@
-EMCHAT PRO V6.1 FULL FIXED
-Devices fix + session stability hotfix
-2026-08-29
+EMCHAT PRO V6.2 FINAL - DEVICES + MIGRATION FIX
