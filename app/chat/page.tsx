@@ -1,1 +1,1 @@
-import ChatApp from '@/components/ChatApp'; export default function ChatPage(){return <ChatApp/>}
+import ChatApp from '@/components/ChatApp'; export default function Page(){return <ChatApp/>}

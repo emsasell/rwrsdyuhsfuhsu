@@ -1,30 +1,93 @@
-# EMCHAT PRO V5
-Полная версия для Vercel + Supabase + Vercel Blob.
+# EMCHAT PRO V6 FULL
 
-## Что внутри
+Полная версия Telegram-подобного мессенджера для Vercel + Supabase + Vercel Blob.
+
+## Реализовано
+
 - регистрация и вход;
-- сохранение сессии (`persistSession` + auto refresh), аккаунт не должен самопроизвольно выходить;
+- постоянная Supabase-сессия (`persistSession` + `autoRefreshToken`);
 - реальные пользователи и профили;
-- личные чаты, группы, каналы;
-- ссылки-приглашения;
-- фото, видео и файлы до 50 МБ через Vercel Blob;
-- аватары и описания чатов;
-- редактирование и удаление сообщений;
+- username, имя, био и аватар;
+- личные сообщения по username;
+- группы и каналы;
+- приглашение пользователя по username;
+- ссылка-приглашение `/join/...`;
+- фото, видео, аудио и файлы до 50 МБ;
+- Vercel Blob для файлов, не Supabase Storage;
+- удаление и редактирование своих сообщений;
+- ответы;
+- закрепление и открепление сообщений;
+- владельцы и администраторы;
+- отдельные права администраторов;
 - кик, бан, разбан, мут;
+- список забаненных;
 - передача владельца;
-- устройства и удалённый кик устройства;
-- отдельная современная анимация интерфейса.
+- изменение названия, описания и аватара группы/канала;
+- список устройств;
+- кик других устройств;
+- realtime обновление сообщений;
+- адаптивный мобильный интерфейс.
 
-## Без терминала: запуск
-1. В Supabase открой **SQL Editor** и выполни `supabase/schema.sql`.
-2. В Vercel создай Blob Storage и подключи к проекту.
-3. В Vercel → Settings → Environment Variables добавь значения из `.env.example`.
-4. Загрузить **содержимое** ZIP в GitHub-репозиторий проекта (заменив старые файлы).
-5. В Vercel открой Deployments и дождись **Ready**.
-6. В Supabase Authentication → URL Configuration добавь URL своего сайта в Site URL и Redirect URLs.
+## Установка БЕЗ терминала
 
-Важно: `BLOB_READ_WRITE_TOKEN` не публикуй и не отправляй в чат.
+### 1. Supabase
 
+1. Открой свой проект Supabase.
+2. Перейди в **SQL Editor → New query**.
+3. Открой `supabase/schema.sql` из этого архива.
+4. Скопируй весь текст и нажми **Run**.
+5. Если SQL уже запускался частично раньше, этот файл использует безопасные `if not exists` / `add column if not exists` для основных обновлений.
 
-## V5.1 build fix
-This archive includes `tailwindcss`, `postcss`, `autoprefixer`, `postcss.config.js`, and `tailwind.config.js` to prevent the Vercel error `Cannot find module 'tailwindcss'` when an existing repository still has Tailwind/PostCSS build settings.
+### 2. Vercel Blob
+
+В Vercel:
+
+**Storage → Create → Blob → Connect to Project**.
+
+После подключения Vercel обычно создаёт `BLOB_READ_WRITE_TOKEN` автоматически. Проверь это в **Project → Settings → Environment Variables**.
+
+### 3. Переменные Vercel
+
+Добавь:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `BLOB_READ_WRITE_TOKEN`
+
+Значения Supabase находятся в **Supabase → Project Settings → API**.
+
+### 4. GitHub
+
+Распакуй ZIP и загрузи **содержимое папки `EMCHAT-PRO-V6-FULL` в корень репозитория**.
+
+Важно: не должно получиться:
+
+`репозиторий/EMCHAT-PRO-V6-FULL/app/...`
+
+Нужно:
+
+`репозиторий/app/...`
+
+Обязательно замени старые:
+
+- `package.json`
+- `app/`
+- `components/`
+- `lib/`
+- `supabase/`
+- `tsconfig.json`
+- `next.config.ts`
+
+### 5. Vercel
+
+После Commit Vercel начнёт новый Deploy автоматически.
+
+Если Vercel показывает старую ошибку, используй **Redeploy** и очистку build cache, если Vercel предлагает эту опцию.
+
+## Важно
+
+Для загрузки файлов используется `/api/upload/route.ts` и актуальный обработчик `handleUpload` с обязательным `onUploadCompleted`, поэтому исправлена ошибка предыдущей сборки:
+
+`Property 'onUploadCompleted' is missing`.
+
+Проект не использует Tailwind, поэтому ошибки `Cannot find module 'tailwindcss'` здесь не должно быть.

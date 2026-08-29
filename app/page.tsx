@@ -1,1 +1,1 @@
-import {redirect} from 'next/navigation'; export default function Page(){redirect('/auth')}
+import { redirect } from 'next/navigation'; export default function Page(){redirect('/chat')}
