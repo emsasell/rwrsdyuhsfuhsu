@@ -81,6 +81,27 @@ alter table public.profiles add column if not exists username text;
 alter table public.profiles add column if not exists avatar_url text;
 alter table public.profiles add column if not exists bio text;
 
+-- Devices compatibility upgrade. This keeps both fresh installs and older EMCHAT databases working.
+alter table public.devices add column if not exists name text;
+alter table public.devices add column if not exists device_name text;
+alter table public.devices add column if not exists device_type text;
+alter table public.devices add column if not exists last_seen timestamptz default now();
+alter table public.devices add column if not exists last_seen_at timestamptz;
+alter table public.devices add column if not exists is_current boolean not null default false;
+update public.devices set name=coalesce(name,device_name,'Устройство') where name is null;
+update public.devices set last_seen=coalesce(last_seen,last_seen_at,created_at,now()) where last_seen is null;
+
+create or replace function public.get_my_devices()
+returns table(id text, user_id uuid, name text, device_type text, user_agent text, last_seen timestamptz, created_at timestamptz, is_current boolean)
+language sql stable security definer set search_path=public as $$
+ select d.id::text,d.user_id,coalesce(d.name,d.device_name,'Устройство'),d.device_type,d.user_agent,
+        coalesce(d.last_seen,d.last_seen_at,d.created_at),d.created_at,d.is_current
+ from public.devices d where d.user_id=auth.uid()
+ order by coalesce(d.is_current,false) desc,coalesce(d.last_seen,d.last_seen_at,d.created_at) desc
+$$;
+
+grant execute on function public.get_my_devices() to authenticated;
+
 create unique index if not exists chats_invite_code_unique on public.chats(invite_code) where invite_code is not null;
 create index if not exists messages_chat_created_idx on public.messages(chat_id,created_at);
 create index if not exists members_user_idx on public.chat_members(user_id);
