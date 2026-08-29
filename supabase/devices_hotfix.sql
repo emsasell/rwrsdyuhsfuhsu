@@ -61,3 +61,15 @@ language sql stable security definer set search_path=public as $$
 $$;
 
 grant execute on function public.get_my_devices() to authenticated;
+
+-- V7.1: kick another device from the current account.
+drop function if exists public.kick_my_device(text);
+create or replace function public.kick_my_device(p_device_id text)
+returns boolean language plpgsql security definer set search_path=public as $$
+begin
+ delete from public.devices where id=p_device_id and user_id=auth.uid();
+ if not found then raise exception 'Устройство не найдено или уже отключено'; end if;
+ return true;
+end; $$;
+grant execute on function public.kick_my_device(text) to authenticated;
+notify pgrst, 'reload schema';

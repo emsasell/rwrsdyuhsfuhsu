@@ -143,6 +143,19 @@ begin
  return v_id;
 end $$;
 
+-- Fresh RPC name: avoids stale PostgREST schema-cache signatures from older create_chat_full versions.
+create or replace function public.create_chat_v7(p_kind text,p_title text,p_description text default '') returns uuid language plpgsql security definer set search_path=public as $$
+declare v_id uuid; v_code text;
+begin
+ if auth.uid() is null then raise exception 'Not authenticated'; end if;
+ if p_kind not in ('group','channel') then raise exception 'Invalid chat type'; end if;
+ if coalesce(trim(p_title),'')='' then raise exception 'Название обязательно'; end if;
+ v_code:=substr(replace(gen_random_uuid()::text,'-',''),1,16);
+ insert into public.chats(kind,title,description,owner_id,invite_code) values(p_kind,trim(p_title),coalesce(p_description,''),auth.uid(),v_code) returning id into v_id;
+ insert into public.chat_members(chat_id,user_id,role,permissions) values(v_id,auth.uid(),'owner','{\"send_messages\":true,\"invite\":true,\"pin\":true,\"kick\":true,\"ban\":true,\"unban\":true,\"mute\":true,\"edit_chat\":true}'::jsonb);
+ return v_id;
+end $$;
+
 create or replace function public.create_direct_chat(p_username text) returns uuid language plpgsql security definer set search_path=public as $$
 declare v_other uuid; v_id uuid;
 begin
@@ -260,6 +273,7 @@ drop policy if exists devices_own on public.devices; create policy devices_own o
 
 grant execute on function public.get_my_chats() to authenticated;
 grant execute on function public.create_chat_full(text,text,text) to authenticated;
+grant execute on function public.create_chat_v7(text,text,text) to authenticated;
 grant execute on function public.create_direct_chat(text) to authenticated;
 grant execute on function public.add_member_by_username(uuid,text) to authenticated;
 grant execute on function public.join_chat_by_invite(text) to authenticated;
@@ -275,3 +289,14 @@ grant execute on function public.unpin_chat_message(uuid) to authenticated;
 
 do $$ begin alter publication supabase_realtime add table public.messages; exception when duplicate_object then null; end $$;
 do $$ begin alter publication supabase_realtime add table public.chat_members; exception when duplicate_object then null; end $$;
+
+-- V7.1 device kick helper
+drop function if exists public.kick_my_device(text);
+create or replace function public.kick_my_device(p_device_id text)
+returns boolean language plpgsql security definer set search_path=public as $$
+begin
+ delete from public.devices where id=p_device_id and user_id=auth.uid();
+ if not found then raise exception 'Устройство не найдено или уже отключено'; end if;
+ return true;
+end; $$;
+grant execute on function public.kick_my_device(text) to authenticated;

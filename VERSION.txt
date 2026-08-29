@@ -1,1 +1,2 @@
-EMCHAT PRO V6.2 FINAL - DEVICES + MIGRATION FIX
+EMCHAT PRO V7.1
+Device kick enabled: remote devices can be removed from account; client checks every 15 seconds.

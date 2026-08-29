@@ -99,3 +99,9 @@
 
 ## V6.2 FINAL IMPORTANT
 Run `supabase/schema.sql` once. It now drops the legacy `get_my_devices()` helper before recreating it, so old databases no longer fail with `cannot change return type` and the whole migration no longer rolls back.
+
+
+## V7.0 FINAL FIX
+1. Run `supabase/V7.0-FINAL-CREATE-AVATAR-FIX.sql` once in Supabase SQL Editor.
+2. Deploy this archive to Vercel. The client now calls `create_chat_v7`, avoiding stale `create_chat_full` schema-cache parameter names.
+3. Profile avatar layout is fixed and device bootstrap no longer logs the account out because of a temporary missing device row.
