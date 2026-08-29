@@ -1,17 +1,31 @@
-# EMCHAT FULL
+# EMCHAT PRO V2
+Полный мессенджер: профили, ЛС, группы, каналы, ссылки-приглашения, фото/видео/файлы до 50 МБ, Vercel Blob, редактирование/удаление сообщений, устройства и кик, постоянная Supabase-сессия.
 
-Полноценный мессенджер: регистрация, реальные пользователи, личные чаты, группы, фото/файлы, аватары, редактирование и удаление сообщений.
+## Без терминала
+1. Распаковать ZIP.
+2. Загрузить содержимое папки в GitHub через Upload files.
+3. Выполнить supabase/schema.sql целиком в Supabase SQL Editor.
+4. В Vercel импортировать GitHub-проект.
+5. Environment Variables:
+   NEXT_PUBLIC_SUPABASE_URL
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+6. Vercel → Storage → Create → Blob → подключить к этому проекту. Vercel автоматически создаст BLOB_READ_WRITE_TOKEN.
+7. Redeploy.
 
-## Установка
-1. npm install
-2. Создайте Supabase project.
-3. Выполните supabase/schema.sql в SQL Editor.
-4. Создайте .env.local из .env.example и вставьте URL + Publishable Key.
-5. В Supabase Authentication настройте Site URL для Vercel.
-6. npm run dev
+Файлы до 50 МБ отправляются напрямую из браузера в Vercel Blob, а не через Vercel Function.
 
-## Vercel
-Добавьте те же две переменные окружения. Не добавляйте service_role key в браузер.
+## V3 moderation
+- Владельцы и администраторы групп и каналов могут менять название, описание и аватар.
+- Владелец управляет администраторами.
+- Администраторы могут мутить, кикать и банить обычных участников.
+- Владелец имеет полный доступ к модерации.
+- Бан запрещает повторный вход по ссылке-приглашению.
 
-## Примечание
-Для более строгого production-доступа к файлам рекомендуется заменить public URLs на signed URLs и расширить Storage RLS.
+
+## V4 moderation and ownership
+- banned users list with **Unban** button;
+- owner transfer with a Crown SVG icon;
+- pinned message banner with Pin SVG icon;
+- individual administrator permissions: kick, ban/unban, mute, edit chat info, invite links, pin messages, and send in channels.
+
+After updating from V3, run the complete `supabase/schema.sql` again. It contains safe `add column if not exists` migrations and replaces the moderation functions.

@@ -1,1 +1,1 @@
-import {redirect} from 'next/navigation'; export default function P(){redirect('/auth')}
+import{redirect}from'next/navigation';export default function P(){redirect('/auth')}

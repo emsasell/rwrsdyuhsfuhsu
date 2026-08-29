@@ -1,0 +1,1 @@
+import J from'../../../components/Join';export default function P({params}:{params:Promise<{code:string}>}){return <J params={params}/>}

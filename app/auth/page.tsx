@@ -1,1 +1,1 @@
-import Auth from '../../components/Auth'; export default function P(){return <Auth/>}
+import A from'../../components/Auth';export default function P(){return <A/>}

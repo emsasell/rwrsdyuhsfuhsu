@@ -1,1 +1,1 @@
-import Chat from '../../components/FullChat'; export default function P(){return <Chat/>}
+import M from'../../components/Messenger';export default function P(){return <M/>}
