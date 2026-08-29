@@ -1,0 +1,1 @@
+import Chat from '../../components/FullChat'; export default function P(){return <Chat/>}

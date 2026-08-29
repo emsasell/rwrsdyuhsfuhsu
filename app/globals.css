@@ -1,0 +1,1 @@
+@tailwind base;@tailwind components;@tailwind utilities;*{box-sizing:border-box}body{margin:0;background:#0e1621;color:#fff;font-family:Arial,sans-serif}button,input{font:inherit}.scrollbar::-webkit-scrollbar{width:6px}.scrollbar::-webkit-scrollbar-thumb{background:#345;border-radius:9px}

@@ -1,0 +1,1 @@
+import './globals.css'; export const metadata={title:'EMCHAT',description:'Messenger'}; export default function L({children}:{children:React.ReactNode}){return <html lang='ru'><body>{children}</body></html>}
