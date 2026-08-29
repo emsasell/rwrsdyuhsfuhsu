@@ -74,6 +74,12 @@ alter table public.messages add column if not exists attachment_name text;
 alter table public.messages add column if not exists attachment_type text;
 alter table public.messages add column if not exists reply_to_id uuid references public.messages(id) on delete set null;
 alter table public.messages add column if not exists edited_at timestamptz;
+-- Legacy chats compatibility: older deployments may have been created without kind/title/owner fields.
+alter table public.chats add column if not exists kind text;
+alter table public.chats add column if not exists title text;
+alter table public.chats add column if not exists owner_id uuid;
+update public.chats set kind='group' where kind is null or kind not in ('dm','group','channel');
+alter table public.chats alter column kind set default 'group';
 alter table public.chats add column if not exists description text;
 alter table public.chats add column if not exists avatar_url text;
 alter table public.chats add column if not exists invite_code text;

@@ -105,3 +105,10 @@ Run `supabase/schema.sql` once. It now drops the legacy `get_my_devices()` helpe
 1. Run `supabase/V7.0-FINAL-CREATE-AVATAR-FIX.sql` once in Supabase SQL Editor.
 2. Deploy this archive to Vercel. The client now calls `create_chat_v7`, avoiding stale `create_chat_full` schema-cache parameter names.
 3. Profile avatar layout is fixed and device bootstrap no longer logs the account out because of a temporary missing device row.
+
+## V7.2 urgent database fix
+If you see `column "kind" of relation "chats" does not exist`, run `supabase/V7.2-CHATS-COMPAT-FIX.sql` in Supabase SQL Editor once, then refresh the app.
+
+
+## V7.3 urgent Supabase fix
+Run `supabase/V7.3-CHATS-COMPAT-SYNTAX-FIX.sql` as one query. It fixes the V7.2 nested dollar-quote syntax error near `update` and safely migrates legacy `chats.type` to `chats.kind`.
