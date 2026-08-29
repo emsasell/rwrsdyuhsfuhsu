@@ -24,3 +24,7 @@
 6. В Supabase Authentication → URL Configuration добавь URL своего сайта в Site URL и Redirect URLs.
 
 Важно: `BLOB_READ_WRITE_TOKEN` не публикуй и не отправляй в чат.
+
+
+## V5.1 build fix
+This archive includes `tailwindcss`, `postcss`, `autoprefixer`, `postcss.config.js`, and `tailwind.config.js` to prevent the Vercel error `Cannot find module 'tailwindcss'` when an existing repository still has Tailwind/PostCSS build settings.
