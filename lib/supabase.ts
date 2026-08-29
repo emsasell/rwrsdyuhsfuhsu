@@ -1,1 +1,3 @@
-import{createClient}from'@supabase/supabase-js';const u=process.env.NEXT_PUBLIC_SUPABASE_URL,k=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY||process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;if(!u||!k)console.error('Missing Supabase environment variables');export const supabase=createClient(u||'https://missing.supabase.co',k||'missing',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+'use client'; import {createClient} from '@supabase/supabase-js';
+const url=process.env.NEXT_PUBLIC_SUPABASE_URL!; const key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+export const supabase=createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'emchat-v5-auth'}});

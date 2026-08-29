@@ -1,1 +1,1 @@
-import M from'../../components/Messenger';export default function P(){return <M/>}
+import ChatApp from '@/components/ChatApp'; export default function ChatPage(){return <ChatApp/>}
